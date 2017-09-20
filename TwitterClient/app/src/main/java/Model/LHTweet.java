@@ -13,6 +13,11 @@ public class LHTweet {
     public String text;
     public String id;
     public LHUser user;
+
+    @Override
+    public String toString() {
+        return text;
+    }
     public LHTweet(JSONObject tweetObject) {
         try {
 

@@ -28,18 +28,11 @@ public class HomeTimelineActivity extends AppCompatActivity {
             Log.d(TAG, "Tweet Text: " + tweet.text);
         }
 
-//        String[] allTweetsText = new String[allTweets.size()];
-//
-//        for (int i = 0; i < allTweetsText.length; i++){
-//            allTweetsText[i] = allTweets.get(i).text;
-//        }
 
         ListAdapter twitterAdapter = new ArrayAdapter<LHTweet>(this, android.R.layout.simple_expandable_list_item_1, allTweets);
         ListView twitterListView = (ListView) findViewById(R.id.twitterListView);
         twitterListView.setAdapter(twitterAdapter);
 
-//        Log.d(TAG, "onCreate: " + LHJson.getSampleJSONAsString(this));
 
-//        Twitter.initialize(this);
     }
 }
