@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TwitterClient</string>
+    <string name="view_more_tweets_button">View More Tweets</string>
 </resources>

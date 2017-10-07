@@ -1,6 +1,9 @@
 package Model;
 
 import android.util.Log;
+
+import com.twitter.sdk.android.core.models.Tweet;
+
 import org.json.JSONObject;
 
 /**
@@ -9,6 +12,7 @@ import org.json.JSONObject;
 
 public class LHTweet {
 
+    public static Tweet selectedTweet;
     private static final String TAG = "LHTweet";
     public String text;
     public String id;

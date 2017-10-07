@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.louis.twitterclient.TweetDetailActivity">
+
+    <TextView
+        android:id="@+id/textView_username"
+        android:layout_width="178dp"
+        android:layout_height="25dp"
+        android:layout_marginHorizontal=".5pt"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="135dp"
+        android:text="TextView"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteY="137dp" />
+
+    <TextView
+        android:id="@+id/textView_location"
+        android:layout_width="178dp"
+        android:layout_height="25dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="TextView"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteY="135dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/textView_username"
+        app:layout_constraintBottom_toTopOf="@+id/textView_tweet_text"
+        android:layout_marginLeft="8dp"
+        tools:layout_editor_absoluteX="196dp" />
+
+    <Button
+        android:id="@+id/button_view_more_tweets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/view_more_tweets_button"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:id="@+id/textView_tweet_text"
+        android:layout_width="343dp"
+        android:layout_height="23dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@+id/textView_username"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteX="-119dp" />
+
+    <ImageView
+        android:id="@+id/imageView_profile_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp" />
+</android.support.constraint.ConstraintLayout>
