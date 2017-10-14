@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void success(Result<TwitterSession> result) {
-                Log.d(TAG, "Success loggin into Twitter: " + result);
+                Log.d(TAG, "Success logging into Twitter: " + result);
                 finish();
 
             }

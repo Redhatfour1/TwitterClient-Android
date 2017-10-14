@@ -8,18 +8,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterApiClient;
 import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.models.Tweet;
+import com.twitter.sdk.android.tweetui.FixedTweetTimeline;
+import com.twitter.sdk.android.tweetui.Timeline;
 import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
-import com.twitter.sdk.android.tweetui.UserTimeline;
-
 import java.util.ArrayList;
-
-import Model.LHJson;
+import java.util.List;
 import Model.LHTweet;
+import retrofit2.Call;
 
 public class HomeTimelineActivity extends AppCompatActivity {
 
@@ -39,8 +42,7 @@ public class HomeTimelineActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: Session " + session);
         
         if(session != null) {
-//            setupListView();
-            setupUserTimelinelist();
+            setupListView();
         } else {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
@@ -50,33 +52,59 @@ public class HomeTimelineActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        setupListView();
-        setupUserTimelinelist();
-    }
-    private void setupUserTimelinelist() {
-        UserTimeline userTimeline = new UserTimeline.Builder().build();
-        TweetTimelineListAdapter userTimelineAdapter = new TweetTimelineListAdapter(this, userTimeline);
-        twitterListView = (ListView) findViewById(R.id.twitter_list_view);
-        twitterListView.setAdapter(userTimelineAdapter);
+        setupListView();
     }
 
     private void setupListView() {
 
         twitterListView = (ListView) findViewById(R.id.twitter_list_view);
-        final ArrayList<LHTweet> allFetchedTweets = LHJson.getTweets(this, true);
-        TweetListAdapter adapter = new TweetListAdapter(allFetchedTweets) {
+
+        TwitterApiClient apiClient = TwitterCore.getInstance().getApiClient();
+        Call<List<Tweet>> homeTimelineCall = apiClient.getStatusesService().homeTimeline(null, null, null, null, null, null, null);
+        homeTimelineCall.enqueue(new Callback<List<Tweet>>() {
+            @Override
+            public void success(Result<List<Tweet>> result) {
+                for (Tweet tweet: result.data){
+                    Log.d(TAG, "success: Tweet Text - " + tweet.text);
+                }
+
+//                FixedTweetTimeline.Builder builder = new FixedTweetTimeline.Builder();
+//                FixedTweetTimeline.Builder tweetTimelineBuilder.build();
+//                FixedTweetTimeline timeline = tweetTimelineBuilder.build();
+                FixedTweetTimeline timeline = new FixedTweetTimeline.Builder().setTweets(result.data).build();
+                updateCurrentListViewWithLatestList(timeline);
+            }
 
             @Override
-            public View getView(int i, View view, ViewGroup viewGroup) {
-                LHTweet currentTweet = (LHTweet) getItem(i);
+            public void failure(TwitterException exception) {
+                Log.d(TAG, "failure: " + exception.getMessage());
 
-                view = getLayoutInflater().inflate(R.layout.tweet_list_item, null);
-                TextView usernameView = (TextView) view.findViewById(R.id.textView_username);
-                TextView tweetTextView = (TextView) view.findViewById(R.id.textView_tweet_text);
-                TextView locationView = (TextView) view.findViewById(R.id.textView_location);
-                usernameView.setText(currentTweet.user.name);
-                tweetTextView.setText(currentTweet.text);
-                locationView.setText(currentTweet.user.location);
+            }
+        });
+
+//        UserTimeline userTimeline = new UserTimeline.Builder().build();
+//        TweetTimelineListAdapter adapter = new TweetTimelineListAdapter(this, userTimeline);
+
+//        twitterListView.setAdapter(adapter);
+    }
+    private void updateCurrentListViewWithLatestList(Timeline<Tweet> tweets){
+        final HomeTimelineActivity homeTimelineActivityContext = this;
+        TweetTimelineListAdapter adapter = new TweetTimelineListAdapter(this, tweets) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                final Tweet currentTweet = this.getItem(position);
+                view.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        LHTweet.selectedTweet = currentTweet;
+
+                        Intent goToTweetDetailIntent = new Intent(homeTimelineActivityContext, TweetDetailActivity.class);
+                        startActivity(goToTweetDetailIntent);
+
+                    }
+                });
 
                 return view;
             }
